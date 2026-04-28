@@ -1,5 +1,5 @@
 import 'rick_and_morty.dart';
 
-Future<void> main() async {
+main() async {
   await printRmCharacters();
 }

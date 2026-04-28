@@ -2,12 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<void> printRmCharacters() async {
-  final url = Uri.parse('https://rickandmortyapi.com/api/character');
-
   try {
-    String nextUrl = url.toString();
+    String? nextUrl = 'https://rickandmortyapi.com/api/character';
 
-    while (nextUrl.isNotEmpty) {
+    while (nextUrl != null) {
       final response = await http.get(Uri.parse(nextUrl));
 
       if (response.statusCode != 200) {
@@ -16,13 +14,12 @@ Future<void> printRmCharacters() async {
 
       final data = jsonDecode(response.body);
 
-      // 🧑‍🚀 afficher les personnages
       for (var character in data['results']) {
         print(character['name']);
       }
 
-      // 🔁 pagination (page suivante)
-      nextUrl = data['info']['next'] ?? '';
+      // ✅ stop proprement quand il n'y a plus de page
+      nextUrl = data['info']['next'];
     }
   } catch (error) {
     print('error caught: $error');

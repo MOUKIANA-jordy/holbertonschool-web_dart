@@ -2,24 +2,19 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<void> printRmCharacters() async {
+  final url = Uri.parse('https://rickandmortyapi.com/api/character');
+
   try {
-    String? nextUrl = 'https://rickandmortyapi.com/api/character';
+    final response = await http.get(url);
 
-    while (nextUrl != null) {
-      final response = await http.get(Uri.parse(nextUrl));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load data');
+    }
 
-      if (response.statusCode != 200) {
-        throw Exception('Failed to load data');
-      }
+    final data = jsonDecode(response.body);
 
-      final data = jsonDecode(response.body);
-
-      for (var character in data['results']) {
-        print(character['name']);
-      }
-
-      // ✅ stop proprement quand il n'y a plus de page
-      nextUrl = data['info']['next'];
+    for (var character in data['results']) {
+      print(character['name']);
     }
   } catch (error) {
     print('error caught: $error');
